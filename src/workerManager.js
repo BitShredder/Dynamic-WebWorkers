@@ -70,19 +70,20 @@ const workerManager = {
     },
 
     /**
-     * Spin up a new instance of a named worker
+     * Spin up a new worker from a named image
      * 
-     * @param {string} name     Name of worker template to use
+     * @param {string} name     Name to assign to new worker
+     * @param {string} image    Image to use for worker
      */
-    start: function (name) {
+    start: function (name, image) {
 
-        const image = images.get(name);
+        const workerImage = images.get(image);
 
-        if (!image) {
-            throw new Error(`"${name}" was not found in available images`);
+        if (!workerImage) {
+            throw new Error(`"${image}" was not found in available images`);
         }
 
-        const worker = DynamicWebWorker.createWorker(new Blob([image.code]));
+        const worker = DynamicWebWorker.createWorker(new Blob([workerImage.code]));
 
         if (!worker) {
             throw new Error(`Could not create worker from image`);
@@ -120,14 +121,32 @@ const workerManager = {
      */
     exec: function (name, fn, args) {
 
-        worker = workers.get(name);
+        const worker = workers.get(name);
 
         if (!worker) {
             throw new Error(`"${name}" is not a running worker`);
         }
 
         worker.exec(fn, args);
+    },
+
+    /**
+     * Gets the state of a named worker
+     * 
+     * @param {string} name     Name of worker to get state for
+     * @returns {number}
+     */
+    getWorkerState: function (name) {
+
+        const worker = workers.get(name);
+
+        if (!worker) {
+            throw new Error(`"${name}" is not a known worker`);
+        }
+
+        return worker.state;
     }
+
 };
 
 export default workerManager;

@@ -19,7 +19,7 @@ self.onmessage = (event) => {
 
     if (event instanceof Object && event.data.hasOwnProperty('exec')) {
         var args = event.data.args || null;
-        self.methods[event.data.exec].call(self, args);
+        self.methods[event.data.exec].apply(self, args);
     }
 }
 

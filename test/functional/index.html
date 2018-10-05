@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
     body { margin: 1em; }
+    #console span { display:block; font-family: 'Courier New', Courier, monospace; color:#999; }
+    label { padding-left: 1em; }
     </style>
 </head>
 
@@ -24,8 +26,39 @@
 
                 <div class="jumbotron">
 
-                    <h1>Dynamic-WebWorker :: Test Suite</h1>
+                    <h1 data-id="stuff">Dynamic-WebWorker :: Test Suite</h1>
                     <p>InternJS powered test suite for the <strong>dynamic-webworker</strong> package.</p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <button id="btn-image" class="btn btn-primary">Create Image</button>
+                <button id="btn-start" class="btn btn-primary">Start Worker</button>
+                <button id="btn-exec" class="btn btn-primary">Exec Method</button>
+                <label><input type="checkbox" id="useHelper"> <span style="font-size:small">Use Helpers</span></label>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+
+            <div class="col-sm">
+                <p><strong>Executable methods</strong></p>
+                <div style="border:1px solid #CCC; border-radius:5px; padding: 1em; margin-bottom: 1em">
+                    <code id="executables"></code>
+                </div>
+                <p><strong>Helper methods</strong></p>
+                <div style="border:1px solid #CCC; border-radius:5px; padding: 1em; margin-bottom: 1em">
+                    <code id="helpers"></code>
+                </div>
+            </div>
+            <div class="col-sm">
+                <p><strong>Console</strong></p>
+                <div id="console" style="border:1px solid #CCC; border-radius:5px; padding: 1em; margin-bottom: 1em; max-height:300px !important; overflow-y: scroll">
 
                 </div>
             </div>
@@ -34,6 +67,98 @@
     </div>
 
     <script src="./dynamic-webworkers.js"></script>
+    <script>
+    // This is our main executable
+    function sayHello (name, cap) {
+        if (cap) {
+            name = capitalize(name);
+        }
+        var response = 'Hello ' + name;
+        done('sayHello', response);
+    }
+
+    // this is a help function
+    function capitalize (str) {
+        return str.toUpperCase();
+    }
+
+    // our exec callback which will receive the response from the worker
+    function callback (evnt) {
+
+        var response = evnt.data.response;
+        log(response);
+    }
+
+    // named executable functions for our web worker
+    var executables = {
+        'sayHello': sayHello
+    };
+
+    // array of helpers
+    var helpers = [capitalize];
+
+    
+    function createImage () {
+
+        wwm.createImage('hello', executables, helpers, callback, null);
+        log('WWM: image created: hello');
+    }
+
+    function startWorker () {
+
+        wwm.start('helloWorker', 'hello');
+        log('WWM: worker started');
+    }
+
+    function exec () {
+
+        var args;
+
+        if (useHelper.checked) {
+            args = ['Bob', true];
+        } else {
+            args = ['Bob'];
+        }
+
+        wwm.exec('helloWorker', 'sayHello', args);
+        log('WWM: exec => sayHello()');
+    }
+
+    // generate UI
+    document.addEventListener('DOMContentLoaded', function (evnt) {
+
+        var executableCode = executables['sayHello'];
+        var helperMethods = helpers.join('<br>');
+
+        document.getElementById('executables').innerHTML = executableCode;
+        document.getElementById('helpers').innerHTML = helperMethods;
+
+        var readyFlag = document.createElement('div');
+        var textNode = document.createTextNode('Ready...');
+
+        readyFlag.setAttribute('class', 'badge badge-success');
+        readyFlag.setAttribute('id', 'ready-status');
+        readyFlag.appendChild(textNode);
+
+        document.querySelector('.jumbotron').appendChild(readyFlag);
+    });
+
+    document.getElementById('btn-image').addEventListener('click', createImage);
+    document.getElementById('btn-start').addEventListener('click', startWorker);
+    document.getElementById('btn-exec').addEventListener('click', exec);
+
+    var fn = function () {
+
+    }
+
+    document.getElementsByTagName('h1')[0].addEventListener('click', fn);
+
+    // log output
+    var console = document.getElementById('console');
+    function log (msg) {
+        console.innerHTML += '<span>&gt; ' + msg + '</span>'; 
+    }
+    </script>
   
 </body>
 

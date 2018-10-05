@@ -1,21 +1,6 @@
 'use strict'
 
 /**
- * @property {number}
- */
-const STATE_IDLE = 0;
-
-/**
- * @property {number}
- */
-const STATE_BUSY = 1;
-
-/**
- * @property {number}
- */
-const STATE_ERROR = 2;
-
-/**
  * @param {DOMString} objectUrl 
  * @param {boolean} useChannels
  * @constructor
@@ -26,9 +11,9 @@ function DynamicWebWorker (objectUrl, useChannels) {
     this.worker = new Worker(this.objectUrl);
 
     if (this.worker) {
-        this.state = STATE_IDLE;
+        this.state = DynamicWebWorker.STATE_IDLE;
     } else {
-        this.state = STATE_ERROR;
+        this.state = DynamicWebWorker.STATE_FAILURE;
     }
 
     this.channel = null;
@@ -51,6 +36,27 @@ DynamicWebWorker.createWorker = function createWorker (initialiser, useChannels)
 
     return new DynamicWebWorker(objectUrl, useChannels);
 }
+
+
+/**
+ * @property {number}
+ */
+DynamicWebWorker.STATE_FAILURE = -1;
+
+/**
+ * @property {number}
+ */
+DynamicWebWorker.STATE_IDLE = 0;
+
+/**
+ * @property {number}
+ */
+DynamicWebWorker.STATE_BUSY = 1;
+
+/**
+ * @property {number}
+ */
+DynamicWebWorker.STATE_ERROR = 2;
 
 
 DynamicWebWorker.prototype = {
@@ -99,7 +105,7 @@ DynamicWebWorker.prototype = {
      */
     exec: function (fn, args) {
 
-        this.worker.state = STATE_BUSY;
+        this.worker.state = DynamicWebWorker.STATE_BUSY;
         this.worker.postMessage({
             exec: fn,
             args: args
