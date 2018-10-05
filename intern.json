@@ -1,0 +1,5 @@
+{
+    "functionalSuites": "test/functional/dedicated-worker.js",
+    "tunnel": "null",
+    "environments": ["chrome"]
+}
