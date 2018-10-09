@@ -10,7 +10,7 @@
  * - Single instance workers
  * - Worker pools for concurrent processing
  * 
- * https://github.com/TheKarmicKoder/Dynamic-WebWorkers
+ * https://github.com/BitShredder/Dynamic-WebWorkers
  * 
  * License ISC
  */
