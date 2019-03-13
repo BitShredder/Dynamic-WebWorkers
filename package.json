@@ -7,6 +7,7 @@
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "intern": "^4.3.1",
     "rollup": "^0.66.2",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-uglify": "^6.0.0"
@@ -29,10 +30,7 @@
   "author": "Phil Ewington",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/TheKarmicKoder/Dynamic-WebWorkers/issues"
+    "url": "https://github.com/BitShredder/Dynamic-WebWorkers/issues"
   },
-  "homepage": "https://github.com/TheKarmicKoder/Dynamic-WebWorkers#readme",
-  "dependencies": {
-    "intern": "^4.3.1"
-  }
+  "homepage": "https://github.com/BitShredder/Dynamic-WebWorkers#readme"
 }
