@@ -4,7 +4,7 @@ export default createWorkerTemplate = function (name, executables, helpers) {
 
     return `
 /**
- * dynamic-webworker - https://github.com/TheKarmicKoder/Dynamic-Webworkers
+ * dynamic-webworker - https://github.com/BitShredder/Dynamic-Webworkers
  * name: ${name}
  * created: ${Date.now()}
  */
