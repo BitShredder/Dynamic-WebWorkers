@@ -4,6 +4,7 @@
   "description": "Spin up dynamic web workers on the fly...",
   "main": "src/index.js",
   "devDependencies": {
+    "axios": ">=0.21.1",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
